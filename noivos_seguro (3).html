@@ -1,0 +1,698 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#315a76"><title>Painel dos noivos | Camila & Edson</title><style>
+:root{font-family:Inter,system-ui,-apple-system,sans-serif;color:#294b61;background:#f7f4f8}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:11px;background:#345f7c;color:white;padding:12px 16px;font-weight:650}button:hover{filter:brightness(1.12)}button:disabled{opacity:.5;cursor:not-allowed}button.outline{background:white;border:1px solid #c4d2df;color:#345c75}button.danger{background:#9a4048}button.small{padding:8px 11px;font-size:.83rem}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #d38ba5;outline-offset:2px}input,select,textarea{width:100%;border:1px solid #c4d2df;border-radius:11px;padding:12px;background:white;color:#294b61}label{display:block;font-size:.84rem;font-weight:700;margin:12px 0 6px}.muted{color:#64777a}.hidden{display:none!important}.top{background:#315a76;color:white;padding:18px max(20px,calc((100vw - 1200px)/2));display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-family:Georgia,serif;font-size:1.45rem}.brand span{color:#f3c8d6}.shell{max-width:1200px;margin:auto;padding:26px 20px 60px}.panel{background:#fffafd;border:1px solid #e8e2e9;border-radius:22px;padding:clamp(18px,3vw,32px);box-shadow:0 10px 30px #345f7c0c}h1,h2{font-family:Georgia,serif;font-weight:400}h1{font-size:clamp(2.2rem,5vw,3.5rem);margin:7px 0}h2{font-size:1.75rem;margin:0 0 12px}.eyebrow{letter-spacing:.18em;text-transform:uppercase;font-size:.7rem;font-weight:800;color:#9f667f}.login{max-width:450px;margin:7vh auto}.nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.nav button{background:transparent;border:1px solid #d3dce7;color:#385e77}.nav button[aria-selected=true]{background:#345f7c;color:white}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}.stat{padding:20px;border-radius:16px;background:#e4eef6}.stat:nth-child(2){background:#d9ebf6}.stat:nth-child(3){background:#f9e8ee}.stat:nth-child(4){background:#e7edf6}.stat b{display:block;font:2rem Georgia,serif;margin-bottom:6px}.stat small{color:#526b6c}.toolbar{display:grid;grid-template-columns:2fr 1fr 1fr auto auto;align-items:end;gap:10px;margin:16px 0}.toolbar label{margin:0 0 6px}.entries{display:grid;gap:10px}.entry{padding:16px;border:1px solid #e4e5eb;border-radius:14px;background:#fff}.entryhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}.entry h3{margin:0 0 8px;font-size:1rem}.entry p{margin:7px 0;overflow-wrap:anywhere}.pill{display:inline-block;padding:5px 10px;border-radius:99px;background:#e7efed;color:#285f54;font-size:.75rem;font-weight:750}.pill.no{background:#fbe7e7;color:#94454b}.pill.warn{background:#f8e8d6;color:#8a552a}.actions{display:flex;gap:8px;flex-wrap:wrap}.notice{padding:14px 16px;background:#f2eaf0;border-left:3px solid #d6a0b3;border-radius:9px;line-height:1.5}.error{color:#a43642}.ok{color:#286f56}.split{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.empty{padding:24px;border:1px dashed #c9d0ca;border-radius:14px;color:#64777a}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.formgrid .wide{grid-column:1/-1}dialog{border:0;border-radius:20px;max-width:560px;width:calc(100% - 24px);padding:25px;color:#294b61;box-shadow:0 25px 80px #0005}dialog::backdrop{background:#294b65a8}.footer{margin-top:18px;font-size:.8rem;color:#65777a}.section[hidden]{display:none!important}@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr 1fr}.toolbar .search{grid-column:1/-1}.top{padding:16px}.shell{padding:16px 12px 50px}}@media(max-width:430px){.toolbar{grid-template-columns:1fr}.toolbar .search{grid-column:auto}.formgrid{grid-template-columns:1fr}.formgrid .wide{grid-column:auto}.nav button{flex:1 1 42%}}
+
+/* Cápsula v2: controles de leitura local, sem serviços externos. */
+.capsule-v2-info{margin:12px 0;padding:12px 14px;background:#f8edf3;border-radius:12px;line-height:1.55}
+.capsule-v2-tag{font-size:.78rem;font-weight:750;color:#315f61}
+.capsule-v2-actions{margin-top:12px}
+.capsule-v2-actions button{margin-top:4px}
+#capsuleDecryptDialog{max-width:600px}
+#capsuleDecryptDialog .fineprint{font-size:.83rem;color:#586d70;line-height:1.55}
+#capsuleDecryptDialog .actions{margin-top:16px}
+.capsule-local-text{margin-top:10px;padding:12px;border-radius:10px;background:#f1f5f2;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.55}
+@media(max-width:430px){#capsuleDecryptDialog{padding:18px}}
+
+/* Configurações — somente elementos de interface; segurança real no Supabase */
+.settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:18px}
+.settings-card{border:1px solid #e4e5eb;border-radius:17px;padding:20px;background:#fff}
+.settings-card h3{font:1.4rem Georgia,serif;margin:0 0 13px;color:#345f7c}
+.settings-card p{line-height:1.55;color:#526b6c;margin:8px 0}
+.settings-card dl{margin:0}.settings-card dt{font-size:.77rem;color:#63797a;font-weight:800;margin-top:12px}.settings-card dd{margin:4px 0 0;overflow-wrap:anywhere}
+.settings-card .settings-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
+.settings-card form{margin-top:8px}
+.settings-card input{max-width:460px}
+.settings-card .settings-form-status{min-height:1.3em;margin-top:10px;font-size:.88rem;overflow-wrap:anywhere}
+.settings-card .hint{font-size:.79rem;color:#65777a;line-height:1.45}
+@media(max-width:760px){.settings-grid{grid-template-columns:1fr}.settings-card{padding:17px}}
+</style></head><body><header class="top"><div class="brand">Camila <span>&</span> Edson</div><button id="logout" class="outline hidden" type="button">Sair</button></header><main class="shell"><section id="login" class="panel login"><div class="eyebrow">Acesso privado</div><h1>Área dos noivos</h1><p class="muted">Entre com sua conta autorizada.</p><form id="loginForm"><label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required><label for="password">Senha</label><input id="password" type="password" autocomplete="current-password" required><p><button id="enter" type="submit">Entrar</button></p><p id="loginError" class="error" role="alert"></p></form></section><div id="app" class="hidden"><div class="panel"><div class="split"><div><div class="eyebrow">Painel privado · Camila & Edson</div><h1>Nosso grande dia</h1><p class="muted">Convidados, presentes e acompanhamento do casamento.</p></div><button id="refresh" type="button">↻ Atualizar dados</button></div><nav class="nav" aria-label="Seções do painel"><button data-tab="overview" aria-selected="true">Visão geral</button><button data-tab="guests" aria-selected="false">Convidados</button><button data-tab="gifts" aria-selected="false">Presentes</button><button data-tab="payments" aria-selected="false">Pagamentos</button><button data-tab="reports" aria-selected="false">Relatórios</button><button data-tab="capsule" aria-selected="false">Cápsula do Tempo</button><button data-tab="settings" aria-selected="false">Configurações</button></nav><p id="status" class="muted" role="status" aria-live="polite"></p><section id="overview" class="section"><div class="stats"><div class="stat"><b id="total">—</b><small>Respostas recebidas</small></div><div class="stat"><b id="yes">—</b><small>Confirmadas</small></div><div class="stat"><b id="no">—</b><small>Não confirmadas</small></div><div class="stat"><b id="duplicates">—</b><small>Possíveis duplicadas</small></div></div><h2>Resumo</h2><p id="summary" class="muted"></p></section><section id="guests" class="section" hidden><div class="split"><h2>Lista de convidados</h2><span id="viewCount" class="muted"></span></div><div class="toolbar"><div class="search"><label for="search">Buscar convidado</label><input id="search" type="search" placeholder="Nome ou telefone"></div><div><label for="filter">Presença</label><select id="filter"><option value="todos">Todos</option><option value="sim">Confirmados</option><option value="nao">Não confirmados</option><option value="outros">Outros</option></select></div><div><label for="sort">Ordenação</label><select id="sort"><option value="az">Nome A–Z</option><option value="za">Nome Z–A</option></select></div><button id="export" class="outline" type="button">Exportar CSV</button><button id="toggleDuplicates" class="outline" type="button">Ver duplicadas</button></div><div id="entries" class="entries"></div></section><section id="gifts" class="section" hidden>
+<h2>Presentes recebidos</h2>
+
+<div class="stats"><div class="stat"><b id="financeGiftCount">—</b><small>Presentes com saldo recebido</small></div><div class="stat"><b id="financeGiftTotal">—</b><small>Total após reembolsos</small></div></div>
+<div class="actions"><button type="button" class="outline" id="reloadGifts">Atualizar presentes</button></div>
+<p id="financeGiftsStatus" class="muted" role="status"></p>
+<div id="financeGiftsList" class="entries"></div>
+</section>
+<section id="payments" class="section" hidden>
+<h2>Pagamentos</h2>
+
+<div class="stats"><div class="stat"><b id="financeAllCount">—</b><small>Solicitações</small></div><div class="stat"><b id="financePaidCount">—</b><small>Com saldo recebido</small></div><div class="stat"><b id="financePendingCount">—</b><small>Sem saldo recebido</small></div><div class="stat"><b id="financePaidTotal">—</b><small>Total após reembolsos</small></div></div>
+<div class="actions"><button type="button" class="outline" id="reloadPayments">Atualizar pagamentos</button><button type="button" class="outline" id="exportPayments">Exportar CSV</button></div>
+<p id="financeStatus" class="muted" role="status"></p><div id="financeRows" class="entries"></div>
+</section><section id="reports" class="section" hidden><h2>Relatórios</h2><p>Exporte as confirmações de presença carregadas com segurança para CSV.</p><button id="exportReport" type="button">Baixar CSV de convidados</button><p class="muted">O histórico financeiro e o CSV de pagamentos estão disponíveis na aba Pagamentos, após login autorizado.</p></section><section id="capsule" class="section" hidden><div class="eyebrow">Cartas para o futuro</div><h2>Cápsula do Tempo</h2><div class="stat" style="margin:16px 0;max-width:360px"><b id="capsuleCount">—</b><small>Cartas reais recebidas</small></div><div class="actions"><button id="refreshCapsule" type="button" class="outline">↻ Atualizar contador</button></div><p id="capsuleStatus" role="status" aria-live="polite" class="muted">Entre no painel e atualize para consultar as cartas.</p><div style="margin:18px 0;padding:18px;border:1px solid #e5e8e4;border-radius:14px;background:#fff">
+<h3 style="margin:0 0 7px;font-family:Georgia,serif;font-size:1.3rem">Cartas para o primeiro aniversário 💌</h3>
+<p class="muted" style="line-height:1.5;margin:0 0 13px">Antes de 21/12/2027, o servidor deve manter as cartas bloqueadas. Depois da liberação, cartas antigas poderão aparecer diretamente; as cartas novas (v2) precisarão da chave privada protegida e da senha que a pessoa responsável guardou.</p>
+<div class="actions"><button id="readCapsule" type="button" class="outline">🔒 Verificar bloqueio das cartas</button><button id="nextCapsulePage" type="button" class="outline hidden">Ver próximas cartas</button></div>
+<p id="capsuleReadStatus" class="muted" role="status" aria-live="polite"></p>
+<div id="capsuleLetters" class="entries" aria-live="polite"></div>
+</div><div class="actions"><button id="connectDrive" type="button">Conectar Google Drive</button><button id="createDriveFolder" type="button" class="outline">Criar pasta no Google Drive</button></div><p id="driveStatus" role="status" aria-live="polite" class="muted"></p><p id="folderStatus" role="status" aria-live="polite" class="muted"></p><p id="folderLink"></p><p class="muted">A autorização será feita em uma nova aba. Use a conta Google que guardará as cartas. Nunca compartilhe senhas ou códigos de autorização.</p></section><section id="settings" class="section" hidden>
+<h2>Configurações e segurança</h2>
+<p class="muted">Gerencie o acesso ao painel e consulte os dados importantes do casamento.</p>
+<div class="settings-grid">
+  <article class="settings-card">
+    <h3>Conta dos noivos</h3>
+    <dl><dt>Conta conectada</dt><dd id="settingsEmail">—</dd><dt>Sessão válida até</dt><dd id="settingsExpiry">—</dd><dt>Proteção</dt><dd>Login do Supabase Auth e permissões de acesso no banco</dd></dl>
+    <div class="settings-actions"><button type="button" id="settingsExit" class="outline">Sair da conta</button></div>
+  </article>
+  <article class="settings-card">
+    <h3>Dados do casamento</h3>
+    <dl><dt>Data</dt><dd>21 de dezembro de 2026</dd><dt>Programação</dt><dd>Chegada às 18h · Cerimônia às 19h · Recepção às 20h · Encerramento às 23h</dd><dt>Local</dt><dd>Rua Silveira Martins, 460 — Cabula, Salvador/BA</dd><dt>Liberação das cartas</dt><dd>21 de dezembro de 2027</dd></dl>
+    <p class="hint">Estes dados são informativos. A alteração dos textos públicos é feita no <code>index.html</code>, não aqui.</p>
+  </article>
+  <article class="settings-card">
+    <h3>Alterar senha do painel</h3>
+    <p class="hint">Altera a senha desta conta no Supabase Auth. A senha nova será solicitada no próximo acesso.</p>
+    <form id="changePasswordForm" autocomplete="off">
+      <label for="settingsCurrentPassword">Senha atual</label><input id="settingsCurrentPassword" type="password" autocomplete="current-password" required>
+      <label for="settingsNewPassword">Nova senha (mínimo 12 caracteres)</label><input id="settingsNewPassword" type="password" autocomplete="new-password" minlength="12" required>
+      <label for="settingsConfirmPassword">Confirmar nova senha</label><input id="settingsConfirmPassword" type="password" autocomplete="new-password" minlength="12" required>
+      <div class="settings-actions"><button id="changePasswordButton" type="submit">Salvar nova senha</button><button id="clearPasswordFields" type="button" class="outline">Limpar campos</button></div>
+      <p id="settingsPasswordStatus" class="settings-form-status muted" aria-live="polite" role="status"></p>
+    </form>
+  </article>
+  <article class="settings-card">
+    <h3>Acesso rápido</h3>
+    <p>Use os atalhos para chegar às áreas já configuradas.</p>
+    <div class="settings-actions"><button id="settingsGuests" class="outline" type="button">Convidados</button><button id="settingsCapsule" class="outline" type="button">Cápsula do Tempo</button><button id="settingsExport" class="outline" type="button">Exportar RSVPs</button></div>
+    
+    <p class="hint">A chave privada da Cápsula do Tempo deve continuar guardada fora deste painel.</p>
+  </article>
+</div></section></div></div></main><dialog id="editor"><form id="editForm"><h2>Editar confirmação</h2><p class="muted">Alterações serão gravadas no Supabase somente se sua conta tiver permissão.</p><div class="formgrid"><div><label for="editName">Nome</label><input id="editName" required></div><div><label for="editPhone">Telefone</label><input id="editPhone"></div><div class="wide"><label for="editPresence">Presença</label><select id="editPresence"><option value="sim">Sim</option><option value="nao">Não</option><option value="outros">Outro / não informado</option></select></div><div class="wide"><label for="editMessage">Mensagem</label><textarea id="editMessage" rows="3"></textarea></div></div><p id="editError" class="error" role="alert"></p><div class="actions"><button type="submit" id="saveEdit">Salvar alterações</button><button type="button" id="cancelEdit" class="outline">Cancelar</button></div></form></dialog>
+<dialog id="capsuleDecryptDialog" aria-labelledby="capsuleDecryptTitle">
+  <form id="capsuleDecryptForm" autocomplete="off">
+    <div class="eyebrow">Somente depois de 21/12/2027</div>
+    <h2 id="capsuleDecryptTitle">Abrir carta neste dispositivo</h2>
+    <p class="fineprint">Esta operação usa a criptografia do navegador. Não salva sua chave privada, não grava a senha e não envia esses dados pela internet. Para proteção adicional, prefira baixar a carta e usar o leitor local offline.</p>
+    <p class="muted" id="capsuleDecryptName"></p>
+    <label for="capsulePrivateFile">Chave privada protegida (.json)</label>
+    <input id="capsulePrivateFile" type="file" accept=".json,application/json" required>
+    <label for="capsulePrivatePassword">Senha da chave privada</label>
+    <input id="capsulePrivatePassword" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" required>
+    <p id="capsuleDecryptStatus" class="muted" role="status" aria-live="polite"></p>
+    <div class="actions">
+      <button id="capsuleDecryptSubmit" type="submit">🔐 Abrir carta</button>
+      <button id="capsuleDecryptCancel" class="outline" type="button">Cancelar</button>
+    </div>
+  </form>
+</dialog><script>
+'use strict';
+const URL_BASE='https://ehuinevkvfrmramdztub.supabase.co';const KEY='sb_publishable_aEK9UAaBn3KScjDaYavVrQ_ImRlGHbM';const NOIVOS_UID='a431c44d-b331-40fd-abbd-7bb9bd2bf324';
+const $=id=>document.getElementById(id);let accessToken=null,expiresAt=0,allRows=[],hasId=false,duplicateOnly=false,editingId=null;
+let loggedInEmail = '';
+const escapeHtml=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const normalized=v=>String(v??'').trim().toLocaleLowerCase('pt-BR').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+function group(v){let n=normalized(v);return ['sim','confirmado','confirmada','vou','presente'].includes(n)?'sim':['nao','nao vou','ausente'].includes(n)?'nao':'outros'}
+function duplicateKeys(){let seen=new Set(),dup=new Set();for(const [i,r] of allRows.entries()){let name=normalized(r.nome).replace(/\s+/g,' '),phone=String(r.telefone??'').replace(/\D/g,'');let key=name?'n:'+name:phone?'p:'+phone:null;if(key){if(seen.has(key))dup.add(i);else seen.add(key)}}return dup}
+function showApp(yes){$('login').classList.toggle('hidden',yes);$('app').classList.toggle('hidden',!yes);$('logout').classList.toggle('hidden',!yes)}
+function tab(name){if(name!=='capsule' && $('capsuleLetters')) clearCapsuleLetters();document.querySelectorAll('.section').forEach(el=>el.hidden=el.id!==name);document.querySelectorAll('[data-tab]').forEach(el=>el.setAttribute('aria-selected',String(el.dataset.tab===name)))}
+function status(s,isError=false){$('status').textContent=s;$('status').className=isError?'error':'muted'}
+async function api(path,options={}){if(!accessToken||Date.now()>expiresAt-30000)throw Error('Sessão expirada. Saia e entre novamente.');let res=await fetch(URL_BASE+path,{...options,headers:{apikey:KEY,Authorization:'Bearer '+accessToken,...(options.body?{'Content-Type':'application/json'}:{}),...(options.headers||{})}});if(!res.ok){let details='';try{details=(await res.json()).message||''}catch{}throw Error('Supabase: '+res.status+(details?' — '+details:''))}return res.status===204?null:res.json()}
+async function load(){status('Atualizando confirmações...');let rows;try{rows=await api('/rest/v1/rsvp_confirmacoes?select=id,nome,telefone,presenca,mensagem&limit=1000');hasId=true}catch(err){if(/42703|column.*id|does not exist/i.test(err.message)){rows=await api('/rest/v1/rsvp_confirmacoes?select=nome,telefone,presenca,mensagem&limit=1000');hasId=false}else throw err}if(!Array.isArray(rows))throw Error('Resposta inesperada do Supabase');allRows=rows;$('total').textContent=rows.length;$('yes').textContent=rows.filter(r=>group(r.presenca)==='sim').length;$('no').textContent=rows.filter(r=>group(r.presenca)==='nao').length;$('duplicates').textContent=duplicateKeys().size;$('summary').textContent=`${rows.length} resposta(s) carregada(s). ${duplicateKeys().size} possível(is) repetição(ões) para revisão.`;render();status(rows.length+' resposta(s) carregada(s).'+(!hasId?' Edição desativada: coluna id não disponível.':''))}
+function render(){let dup=duplicateKeys(),q=normalized($('search').value),f=$('filter').value;let rows=allRows.map((r,i)=>({...r,_i:i})).filter(r=>(f==='todos'||group(r.presenca)===f)&&(!duplicateOnly||dup.has(r._i))&&(!q||normalized(r.nome).includes(q)||normalized(r.telefone).includes(q)));rows.sort((a,b)=>normalized(a.nome).localeCompare(normalized(b.nome),'pt-BR')*($('sort').value==='za'?-1:1));$('viewCount').textContent=`Exibindo ${rows.length} de ${allRows.length}`;$('entries').innerHTML=rows.length?rows.map(r=>{let g=group(r.presenca),d=dup.has(r._i);return `<article class="entry"><div class="entryhead"><div><h3>${escapeHtml(r.nome||'Sem nome')}</h3><span class="pill ${g==='nao'?'no':''}">${escapeHtml(r.presenca||'Não informada')}</span> ${d?'<span class="pill warn">Possível duplicata</span>':''}</div><div class="actions">${hasId&&r.id!=null?`<button class="small outline" data-edit="${r._i}">Editar</button><button class="small danger" data-delete="${r._i}">Excluir</button>`:''}</div></div><p><b>Contato:</b> ${escapeHtml(r.telefone||'Não informado')}</p>${r.mensagem?`<p><b>Mensagem:</b> ${escapeHtml(r.mensagem)}</p>`:''}</article>`}).join(''):'<div class="empty">Nenhuma resposta encontrada.</div>'}
+function csv(){if(!allRows.length){status('Não há respostas para exportar.');return}let safe=v=>'"'+String(v??'').replace(/^[=+@\-\t\r]/,"'$&").replace(/"/g,'""')+'"';let data=[['Nome','Telefone','Presença','Mensagem'],...allRows.map(r=>[r.nome,r.telefone,r.presenca,r.mensagem])];let blob=new Blob(['\uFEFF'+data.map(row=>row.map(safe).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='confirmacoes-camila-edson.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);status('CSV exportado.')}
+function openEdit(i){let r=allRows[i];if(!hasId||r?.id==null)return;editingId=r.id;$('editName').value=r.nome||'';$('editPhone').value=r.telefone||'';$('editPresence').value=group(r.presenca);$('editMessage').value=r.mensagem||'';$('editError').textContent='';$('editor').showModal()}
+async function removeRow(i){let r=allRows[i];if(!hasId||r?.id==null)return;if(!confirm(`Excluir permanentemente a resposta de "${r.nome||'Sem nome'}"? Esta ação não pode ser desfeita.`))return;try{await api('/rest/v1/rsvp_confirmacoes?id=eq.'+encodeURIComponent(r.id),{method:'DELETE',headers:{Prefer:'return=representation'}}).then(data=>{if(!Array.isArray(data)||data.length!==1)throw Error('Nenhum registro foi excluído. Confira as permissões RLS.')});await load();status('Registro excluído com sucesso.')}catch(e){status(e.message,true)}}
+$('entries').addEventListener('click',e=>{let edit=e.target.closest('[data-edit]'),del=e.target.closest('[data-delete]');if(edit)openEdit(Number(edit.dataset.edit));if(del)removeRow(Number(del.dataset.delete))});
+$('editForm').addEventListener('submit',async e=>{e.preventDefault();$('saveEdit').disabled=true;$('editError').textContent='';try{let presence=$('editPresence').value,body={nome:$('editName').value.trim(),telefone:$('editPhone').value.trim(),presenca:presence==='outros'?'não informado':presence,mensagem:$('editMessage').value.trim()};let changed=await api('/rest/v1/rsvp_confirmacoes?id=eq.'+encodeURIComponent(editingId),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(body)});if(!Array.isArray(changed)||changed.length!==1)throw Error('Nenhum registro foi atualizado. Confira as permissões RLS.');$('editor').close();await load();status('Resposta atualizada com sucesso.')}catch(err){$('editError').textContent=err.message}finally{$('saveEdit').disabled=false}});
+$('cancelEdit').onclick=()=>$('editor').close();
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();$('loginError').className='error';$('loginError').textContent='';$('enter').disabled=true;try{let res=await fetch(URL_BASE+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({email:$('email').value.trim(),password:$('password').value})});if(!res.ok)throw Error('E-mail ou senha inválidos.');let data=await res.json();if(data.user?.id!==NOIVOS_UID)throw Error('Conta não autorizada.');accessToken=data.access_token;expiresAt=Date.now()+(Number(data.expires_in)||3600)*1000;loggedInEmail=typeof data.user.email==='string'?data.user.email:$('email').value.trim();$('password').value='';await load();showApp(true)}catch(err){accessToken=null;expiresAt=0;$('loginError').textContent=err.message}finally{$('enter').disabled=false}});
+async function connectGoogleDrive(){
+  const button=$('connectDrive'), message=$('driveStatus');
+  if (!accessToken || Date.now()>expiresAt-30000) {message.className='error';message.textContent='Sessão expirada. Saia e entre novamente.';return;}
+  // Abrir a aba no clique evita bloqueio de pop-ups após o fetch assíncrono.
+  const popup=window.open('about:blank','_blank');
+  if(!popup){message.className='error';message.textContent='O navegador bloqueou a nova aba. Permita pop-ups para este site e tente novamente.';return;}
+  try {
+    popup.document.title='Conectando Google Drive';
+    popup.document.body.textContent='Preparando a autorização segura do Google Drive...';
+  } catch (_) {}
+  button.disabled=true;message.className='muted';message.textContent='Verificando a autorização dos noivos...';
+  try {
+    const response=await fetch(URL_BASE+'/functions/v1/google-drive-oauth/start',{
+      method:'GET',headers:{apikey:KEY,Authorization:'Bearer '+accessToken},cache:'no-store'
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok)throw Error(data.error||('Falha ao iniciar a autorização (HTTP '+response.status+').'));
+    if(typeof data.authorization_url!=='string')throw Error('A função não retornou o endereço de autorização.');
+    const destination=new URL(data.authorization_url);
+    if(destination.protocol!=='https:'||destination.hostname!=='accounts.google.com'||destination.pathname!=='/o/oauth2/v2/auth')throw Error('Endereço de autorização inesperado.');
+    if(popup.closed)throw Error('A aba de autorização foi fechada. Clique novamente.');
+    popup.location.replace(destination.href);
+    message.textContent='Autorização aberta. Conclua as etapas na aba do Google. Depois, confira a mensagem de sucesso ou erro naquela aba.';
+  } catch(err) {
+    if(!popup.closed)popup.close();
+    message.className='error';message.textContent=err instanceof Error?err.message:'Não foi possível iniciar a conexão.';
+  } finally {button.disabled=false;}
+}
+$('connectDrive').addEventListener('click',connectGoogleDrive);
+
+async function createDriveFolder() {
+  const button = $('createDriveFolder');
+  const message = $('folderStatus');
+  const linkArea = $('folderLink');
+
+  if (!accessToken || Date.now() > expiresAt - 30000) {
+    message.className = 'error';
+    message.textContent = 'Sua sessão expirou. Entre novamente no painel.';
+    return;
+  }
+
+  button.disabled = true;
+  message.className = 'muted';
+  message.textContent = 'Preparando a pasta no Google Drive...';
+  linkArea.replaceChildren();
+
+  try {
+    const response = await fetch(URL_BASE + '/functions/v1/google-drive-folder', {
+      method: 'POST',
+      headers: { apikey: KEY, Authorization: 'Bearer ' + accessToken },
+      cache: 'no-store'
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.success !== true) {
+      throw new Error(data.error || 'Não foi possível preparar a pasta.');
+    }
+
+    message.className = 'ok';
+    message.textContent = data.created
+      ? 'Pasta criada com sucesso!'
+      : 'Pasta encontrada e conectada com sucesso!';
+
+    if (typeof data.folder_url === 'string') {
+      const url = new URL(data.folder_url);
+      if (url.protocol === 'https:' &&
+          url.hostname === 'drive.google.com' &&
+          url.pathname.startsWith('/drive/folders/')) {
+        const link = document.createElement('a');
+        link.href = url.href;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = 'Abrir pasta no Google Drive';
+        linkArea.appendChild(link);
+      }
+    }
+  } catch (error) {
+    message.className = 'error';
+    message.textContent = error instanceof Error
+      ? error.message
+      : 'Erro desconhecido ao preparar a pasta.';
+  } finally {
+    button.disabled = false;
+  }
+}
+$('createDriveFolder').addEventListener('click', createDriveFolder);
+async function loadCapsuleCount() {
+  const button = $('refreshCapsule');
+  const display = $('capsuleCount');
+  const message = $('capsuleStatus');
+  if (!accessToken || Date.now() > expiresAt - 30000) {
+    message.className = 'error';
+    message.textContent = 'Sessão expirada. Saia e entre novamente.';
+    return;
+  }
+  button.disabled = true;
+  message.className = 'muted';
+  message.textContent = 'Consultando contador de cartas...';
+  try {
+    const response = await fetch(URL_BASE + '/functions/v1/capsule-status', {
+      method: 'GET',
+      headers: { apikey: KEY, Authorization: 'Bearer ' + accessToken },
+      cache: 'no-store'
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.success !== true || !Number.isSafeInteger(data.total) || data.total < 0) {
+      throw Error(data.error || 'Não foi possível consultar as cartas.');
+    }
+    display.textContent = String(data.total);
+    message.className = 'ok';
+    message.textContent = 'Contador atualizado. Conteúdo das cartas protegido.';
+  } catch (err) {
+    message.className = 'error';
+    message.textContent = err instanceof Error ? err.message : 'Erro ao atualizar contador.';
+  } finally {
+    button.disabled = false;
+  }
+}
+const CAPSULE_UNLOCK_MS = Date.parse('2027-12-21T03:00:00Z');
+let capsuleReadPage = 0;
+let capsuleReadLoading = false;
+function updateReadButtonLabel() {
+  const isUnlockedByClock = Date.now() >= CAPSULE_UNLOCK_MS;
+  $('readCapsule').textContent = isUnlockedByClock
+    ? '💌 Ler cartas recebidas'
+    : '🔒 Verificar bloqueio das cartas';
+}
+// As cartas v2 ficam criptografadas em memória somente nesta sessão.
+const capsuleEncryptedCache = new Map();
+let capsuleEncryptedCounter = 0;
+let selectedEncryptedId = null;
+let capsuleDecryptBusy = false;
+
+function clearDecryptFields() {
+  $('capsulePrivateFile').value = '';
+  $('capsulePrivatePassword').value = '';
+  $('capsuleDecryptStatus').textContent = '';
+  selectedEncryptedId = null;
+}
+function clearCapsuleLetters() {
+  capsuleReadPage = 0;
+  capsuleEncryptedCache.clear();
+  capsuleEncryptedCounter = 0;
+  $('capsuleLetters').replaceChildren();
+  $('nextCapsulePage').classList.add('hidden');
+  $('capsuleReadStatus').textContent = '';
+  clearDecryptFields();
+  if ($('capsuleDecryptDialog').open && !capsuleDecryptBusy) $('capsuleDecryptDialog').close();
+}
+function validEncryptedCapsule(obj) {
+  return obj && typeof obj === 'object' && !Array.isArray(obj) &&
+    obj.format === 'capsula-v2' &&
+    obj.algorithm === 'AES-256-GCM+RSA-OAEP' &&
+    obj.hash === 'SHA-256' &&
+    ['iv','wrapped_key','ciphertext'].every(k =>
+      typeof obj[k] === 'string' && obj[k].length > 0 && obj[k].length < 30000 &&
+      /^[A-Za-z0-9_-]+$/.test(obj[k]));
+}
+function capsuleEl(tag, className, value) {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  if (value !== undefined) el.textContent = value;
+  return el;
+}
+function drawCapsuleLetters(letters, append) {
+  const target = $('capsuleLetters');
+  if (!append) {target.replaceChildren(); capsuleEncryptedCache.clear(); capsuleEncryptedCounter = 0;}
+  for (const letter of letters) {
+    if (!letter || typeof letter !== 'object') continue;
+    const article = capsuleEl('article', 'entry');
+    const heading = capsuleEl('h3', '', typeof letter.name === 'string' ? letter.name : 'Convidado');
+    const meta = capsuleEl('small', 'muted');
+    const received = Date.parse(letter.received_at);
+    meta.textContent = Number.isFinite(received)
+      ? new Intl.DateTimeFormat('pt-BR', {dateStyle:'long',timeZone:'America/Bahia'}).format(new Date(received))
+      : 'Data não disponível';
+    article.append(heading, meta);
+
+    if (letter.format === 'capsula-v2') {
+      const info = capsuleEl('p', 'capsule-v2-info', '🔐 Carta criptografada com chave pública (v2). A mensagem só poderá ser aberta com a chave privada protegida.');
+      article.append(info);
+      if (validEncryptedCapsule(letter.encrypted_letter)) {
+        const localId = String(++capsuleEncryptedCounter);
+        capsuleEncryptedCache.set(localId, letter.encrypted_letter);
+        const actions = capsuleEl('div', 'actions capsule-v2-actions');
+        const decrypt = capsuleEl('button', 'small', '🔓 Abrir neste aparelho');
+        decrypt.type = 'button';
+        decrypt.dataset.capsuleAction = 'decrypt';
+        decrypt.dataset.capsuleId = localId;
+        decrypt.dataset.capsuleName = typeof letter.name === 'string' ? letter.name.slice(0,100) : 'Convidado';
+        const download = capsuleEl('button', 'small outline', '⬇ Baixar carta criptografada');
+        download.type = 'button';
+        download.dataset.capsuleAction = 'download';
+        download.dataset.capsuleId = localId;
+        actions.append(decrypt, download);
+        article.append(actions);
+      } else {
+        article.append(capsuleEl('p', 'error', 'Arquivo criptografado incompleto. Consulte o administrador técnico.'));
+      }
+    } else if (letter.format === 'capsula-v1' || (typeof letter.message === 'string' && !letter.format)) {
+      const paragraph = capsuleEl('p', '', typeof letter.message === 'string' ? letter.message : '');
+      paragraph.style.whiteSpace = 'pre-wrap';
+      paragraph.style.lineHeight = '1.65';
+      article.append(paragraph);
+    } else {
+      article.append(capsuleEl('p', 'error', 'Formato de carta não reconhecido.'));
+    }
+    target.appendChild(article);
+  }
+}
+function capsuleFrom64(value, max=100000) {
+  if (typeof value !== 'string' || !value || value.length > max || !/^[A-Za-z0-9_-]+$/.test(value)) {
+    throw Error('Dados criptografados inválidos.');
+  }
+  const base64 = value.replace(/-/g,'+').replace(/_/g,'/');
+  return Uint8Array.from(atob(base64.padEnd(Math.ceil(base64.length/4)*4,'=')),c=>c.charCodeAt(0));
+}
+function openCapsuleDecrypt(id, name) {
+  if (Date.now() < CAPSULE_UNLOCK_MS || !capsuleEncryptedCache.has(id)) return;
+  clearDecryptFields();
+  selectedEncryptedId = id;
+  $('capsuleDecryptName').textContent = 'Carta de: ' + name;
+  $('capsuleDecryptDialog').showModal();
+}
+function downloadCapsuleEncrypted(id) {
+  if (Date.now() < CAPSULE_UNLOCK_MS) return;
+  const content = capsuleEncryptedCache.get(id);
+  if (!validEncryptedCapsule(content)) return;
+  const url = URL.createObjectURL(new Blob([JSON.stringify(content,null,2)+'\n'],{type:'application/json'}));
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = 'camila-edson-carta-criptografada-' + id + '.enc.json';
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),10000);
+}
+$('capsuleLetters').addEventListener('click',event=>{
+  const button = event.target.closest('button[data-capsule-action]');
+  if (!button || !$('capsuleLetters').contains(button)) return;
+  const id = button.dataset.capsuleId;
+  if (button.dataset.capsuleAction === 'decrypt') openCapsuleDecrypt(id, button.dataset.capsuleName||'Convidado');
+  else if (button.dataset.capsuleAction === 'download') downloadCapsuleEncrypted(id);
+});
+$('capsuleDecryptCancel').addEventListener('click',()=>{
+  if (!capsuleDecryptBusy) $('capsuleDecryptDialog').close();
+});
+$('capsuleDecryptDialog').addEventListener('close',clearDecryptFields);
+$('capsuleDecryptDialog').addEventListener('cancel',event=>{
+  if (capsuleDecryptBusy) event.preventDefault();
+});
+$('capsuleDecryptForm').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const statusBox = $('capsuleDecryptStatus');
+  if (capsuleDecryptBusy || !selectedEncryptedId || Date.now() < CAPSULE_UNLOCK_MS) return;
+  const encrypted = capsuleEncryptedCache.get(selectedEncryptedId);
+  const file = $('capsulePrivateFile').files?.[0];
+  const password = $('capsulePrivatePassword').value;
+  if (!validEncryptedCapsule(encrypted) || !file || !password) {
+    statusBox.className = 'error';
+    statusBox.textContent = 'Selecione a chave privada protegida e informe a senha.';
+    return;
+  }
+  capsuleDecryptBusy = true;
+  $('capsuleDecryptSubmit').disabled = true;
+  let rawPrivate = null, unwrapped = null;
+  statusBox.className = 'muted';
+  statusBox.textContent = 'Abrindo carta no navegador, sem enviar sua chave...';
+  try {
+    if (!crypto?.subtle) throw Error('Criptografia não disponível neste navegador.');
+    if (file.size > 100000 || file.size < 20) throw Error('Tamanho da chave privada inválido.');
+    const protectedKey = JSON.parse(await file.text());
+    if (!protectedKey || protectedKey.format !== 'capsula-privada-protegida-v2') {
+      throw Error('Selecione a CHAVE PRIVADA PROTEGIDA original.');
+    }
+    const protection = protectedKey.protection;
+    if (!protection || protection.kdf !== 'PBKDF2' || protection.hash !== 'SHA-256' ||
+        protection.iterations !== 600000 || protection.cipher !== 'AES-256-GCM' ||
+        typeof protectedKey.encrypted_private_pkcs8_b64url !== 'string') {
+      throw Error('O formato da chave privada não é compatível.');
+    }
+    const enc = new TextEncoder();
+    const material = await crypto.subtle.importKey('raw',enc.encode(password),'PBKDF2',false,['deriveKey']);
+    const protectionKey = await crypto.subtle.deriveKey({
+      name:'PBKDF2',salt:capsuleFrom64(protection.salt_b64url),iterations:600000,hash:'SHA-256'
+    },material,{name:'AES-GCM',length:256},false,['decrypt']);
+    rawPrivate = new Uint8Array(await crypto.subtle.decrypt({
+      name:'AES-GCM',iv:capsuleFrom64(protection.iv_b64url)
+    },protectionKey,capsuleFrom64(protectedKey.encrypted_private_pkcs8_b64url)));
+    const rsa = await crypto.subtle.importKey('pkcs8',rawPrivate,{name:'RSA-OAEP',hash:'SHA-256'},false,['decrypt']);
+    rawPrivate.fill(0);rawPrivate = null;
+    unwrapped = new Uint8Array(await crypto.subtle.decrypt({name:'RSA-OAEP'},rsa,capsuleFrom64(encrypted.wrapped_key)));
+    if (unwrapped.length !== 32) throw Error('Chave da carta inválida.');
+    const aes = await crypto.subtle.importKey('raw',unwrapped,{name:'AES-GCM'},false,['decrypt']);
+    unwrapped.fill(0);unwrapped = null;
+    const plaintext = await crypto.subtle.decrypt({name:'AES-GCM',iv:capsuleFrom64(encrypted.iv)},aes,capsuleFrom64(encrypted.ciphertext));
+    const letter = JSON.parse(new TextDecoder().decode(plaintext));
+    if (typeof letter.name !== 'string' || typeof letter.message !== 'string') throw Error('Conteúdo da carta inválido.');
+    const article = $('capsuleLetters').querySelector('button[data-capsule-action="decrypt"][data-capsule-id="'+selectedEncryptedId+'"]')?.closest('article');
+    if (!article) throw Error('Carta não encontrada nesta página.');
+    const previous = article.querySelector('.capsule-local-text');
+    if (previous) previous.remove();
+    const opened = capsuleEl('div','capsule-local-text');
+    const header = capsuleEl('strong','',letter.name);
+    const message = capsuleEl('p','',letter.message);
+    opened.append(header,message);
+    article.appendChild(opened);
+    $('capsuleDecryptDialog').close();
+    $('capsuleReadStatus').className = 'ok';
+    $('capsuleReadStatus').textContent = 'Carta aberta somente neste navegador. Saia do painel para limpar a mensagem da tela.';
+    article.scrollIntoView({behavior:'smooth',block:'start'});
+  } catch(error) {
+    statusBox.className='error';
+    statusBox.textContent = ['OperationError','DataError','InvalidAccessError'].includes(error?.name)
+      ? 'Não foi possível abrir: senha ou chave privada incompatível com a carta.'
+      : (error instanceof Error ? error.message : 'Não foi possível abrir a carta.');
+  } finally {
+    if (rawPrivate) rawPrivate.fill(0);
+    if (unwrapped) unwrapped.fill(0);
+    $('capsulePrivatePassword').value='';
+    $('capsulePrivateFile').value='';
+    capsuleDecryptBusy = false;
+    $('capsuleDecryptSubmit').disabled = false;
+  }
+});
+async function readCapsuleLetters(next = false) {
+  const button = $('readCapsule');
+  const moreButton = $('nextCapsulePage');
+  const statusBox = $('capsuleReadStatus');
+  if (capsuleReadLoading) return;
+  if (!accessToken || Date.now() > expiresAt - 30000) {
+    statusBox.className = 'error';
+    statusBox.textContent = 'Sua sessão expirou. Saia e entre novamente.';
+    return;
+  }
+  const page = next ? capsuleReadPage + 1 : 0;
+  capsuleReadLoading = true;
+  button.disabled = true;
+  moreButton.disabled = true;
+  statusBox.className = 'muted';
+  statusBox.textContent = 'Conferindo autorização e data de abertura...';
+  if (!next) {
+    clearCapsuleLetters();
+  }
+  try {
+    const response = await fetch(URL_BASE + '/functions/v1/ler-cartas?page=' + page, {
+      method: 'GET',
+      headers: { apikey: KEY, Authorization: 'Bearer ' + accessToken },
+      cache: 'no-store'
+    });
+    const result = await response.json().catch(() => ({}));
+    if (response.status === 423 && result.locked === true) {
+      statusBox.className = 'ok';
+      statusBox.textContent = '🔒 Proteção confirmada: o servidor bloqueou a leitura até 21/12/2027.';
+      return;
+    }
+    if (!response.ok || result.success !== true || !Array.isArray(result.letters)) {
+      throw Error(result.error || 'Falha ao verificar o bloqueio das cartas (HTTP ' + response.status + ').');
+    }
+    // Defesa adicional: mesmo com resposta indevida do servidor, não exibir antes da data.
+    if (Date.now() < CAPSULE_UNLOCK_MS) {
+      statusBox.className = 'error';
+      statusBox.textContent = 'Atenção: o servidor respondeu sem bloquear a leitura antes da data. Não exibimos os dados. Suspenda o acesso e revise a função.';
+      return;
+    }
+    capsuleReadPage = page;
+    drawCapsuleLetters(result.letters, next);
+    moreButton.classList.toggle('hidden', result.has_more !== true);
+    statusBox.className = 'ok';
+    statusBox.textContent = result.letters.length
+      ? 'Cartas liberadas para leitura.'
+      : (page === 0 ? 'Nenhuma carta real recebida ainda.' : 'Não há mais cartas nesta página.');
+  } catch (error) {
+    statusBox.className = 'error';
+    statusBox.textContent = error instanceof Error ? error.message : 'Não foi possível consultar as cartas.';
+  } finally {
+    capsuleReadLoading = false;
+    button.disabled = false;
+    moreButton.disabled = false;
+    updateReadButtonLabel();
+  }
+}
+$('readCapsule').addEventListener('click', () => readCapsuleLetters(false));
+$('nextCapsulePage').addEventListener('click', () => readCapsuleLetters(true));
+updateReadButtonLabel();
+$('refreshCapsule').addEventListener('click', loadCapsuleCount);
+document.addEventListener('visibilitychange',()=>{if(document.hidden && !capsuleDecryptBusy){document.querySelectorAll('.capsule-local-text').forEach(el=>el.remove());}});
+function closePrivateSession(){
+  accessToken=null;expiresAt=0;loggedInEmail='';allRows=[];hasId=false;
+  $('password').value='';$('folderStatus').textContent='';$('folderLink').replaceChildren();
+  clearCapsuleLetters();$('capsuleCount').textContent='—';$('changePasswordForm').reset();
+  $('settingsPasswordStatus').textContent='';$('settingsEmail').textContent='—';$('settingsExpiry').textContent='—';showApp(false);
+}
+$('logout').onclick=closePrivateSession;
+$('settingsExit').onclick=closePrivateSession;
+function updateSettings(){
+  $('settingsEmail').textContent=loggedInEmail||'Conta autenticada';
+  $('settingsExpiry').textContent=accessToken&&Number.isFinite(expiresAt)
+    ? new Intl.DateTimeFormat('pt-BR',{dateStyle:'short',timeStyle:'short',timeZone:'America/Bahia'}).format(new Date(expiresAt))+' (horário de Salvador)'
+    : 'Faça login para consultar';
+}
+$('clearPasswordFields').onclick=()=>{$('changePasswordForm').reset();$('settingsPasswordStatus').textContent='';};
+$('settingsGuests').onclick=()=>tab('guests');
+$('settingsCapsule').onclick=()=>{tab('capsule');loadCapsuleCount();};
+$('settingsExport').onclick=csv;
+$('changePasswordForm').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const message=$('settingsPasswordStatus'),btn=$('changePasswordButton');
+  message.className='settings-form-status muted';message.textContent='';
+  const oldPassword=$('settingsCurrentPassword').value;
+  const newPassword=$('settingsNewPassword').value;
+  const confirmation=$('settingsConfirmPassword').value;
+  if(!accessToken||Date.now()>expiresAt-30000){message.className='settings-form-status error';message.textContent='Sessão expirada. Entre novamente.';return;}
+  if(newPassword.length<12||newPassword.length>128){message.className='settings-form-status error';message.textContent='A nova senha deve ter entre 12 e 128 caracteres.';return;}
+  if(!oldPassword||newPassword!==confirmation||oldPassword===newPassword){message.className='settings-form-status error';message.textContent='Confira a senha atual e a confirmação. A nova senha deve ser diferente.';return;}
+  btn.disabled=true;message.textContent='Salvando a nova senha...';
+  try{
+    const response=await fetch(URL_BASE+'/auth/v1/user',{
+      method:'PUT',cache:'no-store',
+      headers:{apikey:KEY,Authorization:'Bearer '+accessToken,'Content-Type':'application/json'},
+      body:JSON.stringify({current_password:oldPassword,password:newPassword})
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok){
+      const code=String(data.error_code||data.code||'');
+      const explanation=String(data.msg||data.message||data.error_description||data.error||'');
+      if(code.includes('reauthentication')||/reauthenticat|nonce/i.test(explanation)) throw Error('O Supabase está exigindo confirmação adicional por e-mail. A senha não foi alterada; será necessário seguir o processo de reautenticação do Supabase.');
+      if(code.includes('current_password')||/current.password/i.test(explanation)) throw Error('Senha atual incorreta. Nenhuma alteração foi feita.');
+      throw Error('Não foi possível alterar a senha ('+response.status+'). '+(explanation||'Confira as regras de segurança no Supabase.'));
+    }
+    if(!data||data.id!==NOIVOS_UID) throw Error('Resposta inesperada da autenticação. Confirme o resultado entrando novamente.');
+    closePrivateSession();
+    $('loginError').className='ok';
+    $('loginError').textContent='Senha alterada. Entre novamente com a nova senha.';
+  }catch(error){message.className='settings-form-status error';message.textContent=error instanceof Error?error.message:'Erro ao atualizar a senha.';}
+  finally{$('changePasswordForm').reset();btn.disabled=false;}
+});
+$('refresh').onclick=async()=>{try{await load()}catch(e){status(e.message,true)}await loadFinance();};
+$('search').oninput=render;$('filter').onchange=render;$('sort').onchange=render;$('toggleDuplicates').onclick=()=>{duplicateOnly=!duplicateOnly;$('toggleDuplicates').textContent=duplicateOnly?'Mostrar todos':'Ver duplicadas';render()};$('export').onclick=csv;$('exportReport').onclick=csv;document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab(b.dataset.tab);if(b.dataset.tab==='capsule')loadCapsuleCount();if(b.dataset.tab==='settings')updateSettings();if(b.dataset.tab==='payments'||b.dataset.tab==='gifts')loadFinance();});
+
+// FINANCEIRO — leitura autenticada pela funcao pagamentos-admin.
+// Compativel com API paginada: {success, page, limit, total_filtrado, has_more, resumo, pagamentos}.
+// Nao presume pagamento aprovado sem confirmacao ja registrada pelo servidor.
+let financePayments=[];
+let financeBusy=false;
+let financeLoaded=false;
+const financeMoney=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(v)||0);
+const financeText=v=>String(v??'').trim();
+const financePaid=p=>['aprovado','reembolso_parcial'].includes(financeText(p.status).toLowerCase());
+const financeNet=p=>Math.max(0,(Number(p.valor)||0)-(Number(p.valor_reembolsado)||0));
+const financeName=p=>{
+  const supplied=financeText(p.presente_nome);
+  if(supplied)return supplied;
+  if(!financeText(p.presente_id))return 'Presente de valor livre';
+  const lookup=financeGiftNames.get(financeText(p.presente_id));
+  return lookup||'Presente (identificador: '+financeText(p.presente_id||'não informado')+')';
+};
+let financeGiftNames=new Map();
+async function loadFinance(){
+  if(financeBusy||!accessToken)return;
+  financeBusy=true;
+  const paymentsStatus=$('financeStatus');
+  const giftsStatus=$('financeGiftsStatus');
+  paymentsStatus.textContent='Carregando pagamentos do Supabase...';
+  giftsStatus.textContent='Carregando presentes confirmados...';
+  try{
+    if(Date.now()>expiresAt-30000)throw Error('Sessão expirada. Entre novamente.');
+    const rows=[];
+    const maxPages=100; // limite de seguranca: 10.000 registros
+    let totalExpected=null;
+    for(let page=0;page<maxPages;page++){
+      const url=URL_BASE+'/functions/v1/pagamentos-admin?page='+page+'&limit=100';
+      const response=await fetch(url,{
+        method:'GET',cache:'no-store',headers:{apikey:KEY,Authorization:'Bearer '+accessToken}
+      });
+      const payload=await response.json().catch(()=>({}));
+      if(!response.ok||payload.success!==true||!Array.isArray(payload.pagamentos)){
+        throw Error(payload.erro||payload.error||'Erro ao consultar pagamentos (HTTP '+response.status+').');
+      }
+      rows.push(...payload.pagamentos);
+      const n=Number(payload.total_filtrado);
+      if(Number.isSafeInteger(n)&&n>=0)totalExpected=n;
+      const hasMore=typeof payload.has_more==='boolean' ? payload.has_more :
+        (totalExpected!==null && rows.length<totalExpected);
+      if(!hasMore)break;
+      if(page===maxPages-1)throw Error('Mais de 10.000 registros; consulte o suporte antes de exportar.');
+    }
+    // Buscar apenas nomes publicos dos presentes. Se RLS impedir, nao
+    // contornar a regra: exibir o identificador do presente em vez do nome.
+    const names=new Map();
+    try{
+      const response=await fetch(
+        URL_BASE+'/rest/v1/presentes?select=id,nome&limit=1000',
+        {cache:'no-store',headers:{apikey:KEY,Authorization:'Bearer '+accessToken}}
+      );
+      if(response.ok){
+        const data=await response.json();
+        if(Array.isArray(data))for(const item of data){
+          if(item&&typeof item.id==='string'&&typeof item.nome==='string')names.set(item.id,item.nome);
+        }
+      }
+    }catch(_ignored){}
+    financeGiftNames=names;
+    financePayments=rows;
+    financeLoaded=true;
+    drawFinance();
+    paymentsStatus.textContent=rows.length+' solicitação(ões) carregada(s). O total considera os reembolsos registrados. Testes Sandbox não aparecem neste histórico.';
+    giftsStatus.textContent='Lista de presentes com saldo recebido, conforme registros no Supabase.';
+  }catch(error){
+    const message=error instanceof Error?error.message:'Falha na consulta.';
+    paymentsStatus.textContent=message;
+    giftsStatus.textContent=message;
+    // Em caso de falha, remover dados antigos para evitar mostrar valores desatualizados.
+    financePayments=[];financeGiftNames=new Map();financeLoaded=false;
+    resetFinance(message);
+  }finally{financeBusy=false;}
+}
+function resetFinance(message){
+  for(const id of ['financeAllCount','financePaidCount','financePendingCount','financePaidTotal','financeGiftCount','financeGiftTotal']){
+    $(id).textContent='—';
+  }
+  $('financeRows').textContent='';
+  $('financeGiftsList').textContent='';
+  const text=message||'Nenhum dado carregado.';
+  const empty1=document.createElement('div');empty1.className='empty';empty1.textContent=text;
+  const empty2=document.createElement('div');empty2.className='empty';empty2.textContent=text;
+  $('financeRows').appendChild(empty1);
+  $('financeGiftsList').appendChild(empty2);
+}
+function drawFinance(){
+  const rows=financePayments;
+  const approved=rows.filter(financePaid);
+  $('financeAllCount').textContent=String(rows.length);
+  $('financePaidCount').textContent=String(approved.length);
+  $('financePendingCount').textContent=String(rows.length-approved.length);
+  $('financePaidTotal').textContent=financeMoney(approved.reduce((sum,p)=>sum+financeNet(p),0));
+  $('financeGiftCount').textContent=String(approved.length);
+  $('financeGiftTotal').textContent=$('financePaidTotal').textContent;
+  const rowCard=p=>{
+    const paid=financePaid(p);
+    const user=p.anonimo?'Identificação restrita aos noivos: '+financeText(p.nome_convidado||'Não informada'):
+      (financeText(p.nome_convidado)||'Nome não informado');
+    const asaasCheckoutId=financeText(p.asaas_checkout_id);
+    const paymentId=financeText(p.mercado_pago_payment_id);
+    const legacyPreferenceId=financeText(p.mercado_pago_preference_id);
+    const provider=asaasCheckoutId?'Asaas':(paymentId||legacyPreferenceId?'Mercado Pago (histórico)':'Não identificado');
+    const method=financeText(p.metodo);
+    const methodLabel=method==='pix'?'Pix':method==='cartao'?'Cartão':method;
+    const status=financeText(p.status).toLowerCase()==='reembolso_parcial'?'Reembolso parcial':paid?'Pagamento aprovado':financeText(p.status||'Pendente');
+    return '<article class="entry"><div class="entryhead"><div><h3>'+escapeHtml(financeName(p))+'</h3>'+
+      '<span class="pill '+(paid?'':'warn')+'">'+escapeHtml(status)+'</span></div>'+
+      '<strong>'+escapeHtml(financeMoney(p.valor))+'</strong></div>'+
+      (Number(p.valor_reembolsado)>0?'<p><b>Reembolsado:</b> '+escapeHtml(financeMoney(p.valor_reembolsado))+'</p><p><b>Saldo do presente:</b> '+escapeHtml(financeMoney(financeNet(p)))+'</p>':'')+
+      '<p><b>Convidado:</b> '+escapeHtml(user)+'</p>'+
+      (p.mensagem?'<p><b>Mensagem:</b> '+escapeHtml(p.mensagem)+'</p>':'')+
+      '<p class="muted"><small>Provedor: '+escapeHtml(provider)+(methodLabel?' · Método: '+escapeHtml(methodLabel):'')+'</small></p>'+
+      (asaasCheckoutId?'<p class="muted"><small>Checkout Asaas: '+escapeHtml(asaasCheckoutId)+'</small></p>':'')+
+      (paymentId?'<p class="muted"><small>ID Mercado Pago: '+escapeHtml(paymentId)+'</small></p>':'')+
+      '</article>';
+  };
+  $('financeRows').innerHTML=rows.length?rows.map(rowCard).join(''):'<div class="empty">Nenhuma solicitação de pagamento registrada.</div>';
+  $('financeGiftsList').innerHTML=approved.length?approved.map(rowCard).join(''):'<div class="empty">Nenhum pagamento confirmado ainda.</div>';
+}
+function exportFinanceCsv(){
+  if(!financeLoaded){$('financeStatus').textContent='Carregue os pagamentos antes de exportar.';return;}
+  if(!financePayments.length){$('financeStatus').textContent='Nenhum pagamento para exportar.';return;}
+  const safe=v=>'"'+String(v??'').replace(/^[=+@\-\t\r]/,"'$&").replace(/"/g,'""')+'"';
+  const rows=[['Presente','Nome','Valor (BRL)','Reembolsado (BRL)','Saldo (BRL)','Status','Método','Provedor','Checkout Asaas','ID Mercado Pago','Referência','Pago em'],...financePayments.map(p=>[
+    financeName(p),p.nome_convidado,p.valor,p.valor_reembolsado,financeNet(p),p.status,p.metodo,
+    financeText(p.asaas_checkout_id)?'Asaas':(financeText(p.mercado_pago_payment_id)||financeText(p.mercado_pago_preference_id)?'Mercado Pago (histórico)':'Não identificado'),
+    p.asaas_checkout_id,p.mercado_pago_payment_id,p.referencia_externa,p.pago_em
+  ])];
+  const blob=new Blob(['\uFEFF'+rows.map(r=>r.map(safe).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const link=URL.createObjectURL(blob);const a=document.createElement('a');a.href=link;
+  a.download='pagamentos-camila-edson.csv';document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(link),2000);
+  $('financeStatus').textContent='CSV de pagamentos exportado.';
+}
+$('reloadGifts').onclick=loadFinance;
+$('reloadPayments').onclick=loadFinance;
+$('exportPayments').onclick=exportFinanceCsv;
+</script></body></html>
