@@ -1,0 +1,23 @@
+SITE CAMILA & EDSON — ARQUIVOS PARA GITHUB PAGES
+
+ESTE ZIP CONTÉM O index.html E TODAS AS IMAGENS QUE ESSE HTML USA:
+- 24 imagens dos presentes: presente-original-10.webp até presente-original-33.webp
+- 3 fotos da linha do tempo: linha-do-tempo-01.webp a linha-do-tempo-03.webp
+- 1 foto de confirmação de presença: foto-presenca.webp
+- 9 fotos previamente utilizadas no site: imagem-01.webp até imagem-09.jpg/webp
+
+A foto do beijo ao pôr do sol que foi enviada duas vezes está presente apenas uma vez.
+Total de imagens distintas: 37.
+
+COMO ENVIAR AO GITHUB
+1. Entre no repositório do site no GitHub.
+2. Extraia o conteúdo do ZIP; envie os arquivos para a RAIZ do repositório, no mesmo nível do index.html atual.
+3. Confirme a substituição do index.html anterior e dos arquivos de imagem com os mesmos nomes.
+4. MANTENHA todos os outros arquivos existentes no repositório (incluindo eventuais páginas administrativas e de privacidade). Este ZIP só substitui o index.html e os arquivos de imagem usados nele.
+5. Faça commit e confira a publicação no navegador, inclusive as imagens, os presentes e a confirmação de presença.
+
+SEGURANÇA E FUNCIONALIDADES
+O HTML foi mantido a partir do pacote anterior, que já incluía integração de pagamentos, RSVP e cartas para o futuro. Os blocos de JavaScript não foram modificados durante a montagem deste pacote. A operação real das integrações depende da implantação existente, das configurações e dos serviços externos; valide tudo no site publicado.
+
+OBSERVAÇÃO SOBRE AS 9 FOTOS ANTIGAS
+As fotos reenviadas não foram editadas; elas receberam os nomes imagem-01 a imagem-09 de acordo com a descrição das seções do HTML. Caso a distribuição das fotos antigas no site publicado fosse diferente, confira visualmente a galeria após publicar.
